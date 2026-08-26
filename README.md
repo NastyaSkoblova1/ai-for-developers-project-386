@@ -98,4 +98,4 @@ lt --port 3000
 
 Команда выдаст временный публичный URL (например, `https://xxxx.loca.lt`).
 
-**Публичная ссылка:** *(заполнить после деплоя)*
+**Публичная ссылка:** https://stunning-nurturing-production-58d4.up.railway.app
