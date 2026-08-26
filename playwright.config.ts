@@ -8,7 +8,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: 'list',
   use: {
-    baseURL: 'http://localhost:5173',
+    baseURL: 'http://localhost:3000',
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
@@ -21,15 +21,8 @@ export default defineConfig({
   ],
   webServer: [
     {
-      command: 'npx tsx src/server.ts',
+      command: 'npm run build && cd frontend && npm run build && cd .. && NODE_ENV=production PORT=3000 HOST=0.0.0.0 node dist/server.js',
       url: 'http://localhost:3000',
-      reuseExistingServer: !process.env.CI,
-      stdout: 'pipe',
-      stderr: 'pipe',
-    },
-    {
-      command: 'cd frontend && npx vite',
-      url: 'http://localhost:5173',
       reuseExistingServer: !process.env.CI,
       stdout: 'pipe',
       stderr: 'pipe',

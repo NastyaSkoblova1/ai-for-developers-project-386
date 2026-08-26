@@ -1,9 +1,6 @@
-import { client } from '@/generated/client.gen'
+import { createClient, createConfig } from '@/generated/client'
+import type { ClientOptions } from '@/generated/client'
 
 const baseUrl = import.meta.env.VITE_API_BASE_URL || '/api'
 
-client.setConfig({
-  baseUrl,
-})
-
-export { client as apiClient }
+export const apiClient = createClient(createConfig<ClientOptions>({ baseUrl }))
