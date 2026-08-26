@@ -5,10 +5,6 @@ import { createBooking } from "../services/bookings.js";
 import { ApiError } from "../lib/errors.js";
 
 export async function publicRoutes(app: FastifyInstance): Promise<void> {
-  app.get("/", async (_req, reply) => {
-    return reply.send({ status: "ok", service: "calendar-booking-service" });
-  });
-
   app.get("/event-types", async (_req, reply) => {
     const items = listEventTypes();
     return reply.send({ items });

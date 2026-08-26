@@ -1,15 +1,26 @@
 import fastify from "fastify";
 import cors from "@fastify/cors";
+import fastifyStatic from "@fastify/static";
+import path from "node:path";
 import { publicRoutes } from "./routes/public.js";
 import { adminRoutes } from "./routes/admin.js";
 
 export function buildApp() {
   const app = fastify({ logger: true });
 
-  const frontendOrigin = process.env.FRONTEND_ORIGIN || "http://localhost:5173";
+  if (process.env.NODE_ENV !== "production") {
+    const frontendOrigin = process.env.FRONTEND_ORIGIN || "http://localhost:5173";
+    app.register(cors, {
+      origin: frontendOrigin,
+    });
+  }
 
-  app.register(cors, {
-    origin: frontendOrigin,
+  const distPath = path.resolve(process.cwd(), "frontend/dist");
+
+  app.register(fastifyStatic, {
+    root: distPath,
+    prefix: "/",
+    wildcard: false,
   });
 
   app.addContentTypeParser(
@@ -25,8 +36,15 @@ export function buildApp() {
     },
   );
 
-  app.register(publicRoutes);
-  app.register(adminRoutes);
+  app.register(publicRoutes, { prefix: "/api" });
+  app.register(adminRoutes, { prefix: "/api" });
+
+  app.setNotFoundHandler(async (req, reply) => {
+    if (req.url.startsWith("/api/")) {
+      return reply.status(404).send({ code: 404, message: "Not Found" });
+    }
+    return reply.sendFile("index.html", distPath);
+  });
 
   app.setErrorHandler((error, _request, reply) => {
     app.log.error(error);

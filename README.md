@@ -46,9 +46,34 @@ FRONTEND_ORIGIN=http://localhost:5173
 
 ### API
 
-- `GET /event-types` — список типов событий
-- `GET /event-types/:id/slots` — свободные слоты на 14 дней
-- `POST /bookings` — создать бронирование (возвращает 409 при конфликте)
-- `GET /admin/owner` — профиль владельца
-- `GET|POST /admin/event-types` — CRUD типов событий
-- `GET /admin/bookings` — список всех бронирований
+- `GET /api/event-types` — список типов событий
+- `GET /api/event-types/:id/slots` — свободные слоты на 14 дней
+- `POST /api/bookings` — создать бронирование (возвращает 409 при конфликте)
+- `GET /api/admin/owner` — профиль владельца
+- `GET|POST /api/admin/event-types` — CRUD типов событий
+- `GET /api/admin/bookings` — список всех бронирований
+
+## Docker
+
+Собрать и запустить локально:
+
+```bash
+docker build -t meeting-app .
+docker run --rm -e PORT=3000 -e HOST=0.0.0.0 -p 3000:3000 meeting-app
+```
+
+Приложение откроется на http://localhost:3000. Frontend и backend работают в одном контейнере.
+
+## Production deployment
+
+- **Платформа:** Render (Web Service, Docker runtime)
+- **Конфигурация:** `render.yaml` в корне репозитория
+- **Схема:** один Docker-контейнер, в котором Fastify раздаёт собранный frontend (`frontend/dist`) и API
+- **Порт:** приложение использует переменную окружения `PORT`
+- **Данные:** in-memory (хранятся в процессе и сбрасываются при перезапуске контейнера)
+
+Для деплоя:
+1. Запушьте изменения в `main`
+2. В Render Dashboard: **New Web Service** → выберите репозиторий → **Runtime: Docker** → **Deploy**
+
+**Публичная ссылка:** *(заполнить после деплоя)*
