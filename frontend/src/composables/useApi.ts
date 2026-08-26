@@ -54,6 +54,7 @@ export function useCreateBookingMutation() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.bookings })
+      queryClient.invalidateQueries({ queryKey: ['slots'] })
     },
   })
 }

@@ -84,18 +84,19 @@ test.describe('Booking scenarios', () => {
     await page.getByRole('button', { name: 'Забронировать ещё' }).click()
     await expect(page.getByTestId('booking-success')).not.toBeVisible()
 
-    // Select the same slot again
+    // Step 5: The same slot should no longer be visible after booking
     const sameSlotButton = page.locator(`[data-testid="${slotId}"]`)
-    await expect(sameSlotButton).toBeVisible()
-    await sameSlotButton.click()
+    await expect(sameSlotButton).not.toBeVisible()
 
-    await expect(page.getByTestId('guest-name-input')).toBeVisible()
-    await page.getByTestId('guest-name-input').fill('Second User')
-    await page.getByTestId('guest-email-input').fill('second@example.com')
-    await page.getByTestId('submit-booking-button').click()
-
-    // Step 5: See clear error, no success confirmation
-    await expect(page.getByTestId('booking-success')).not.toBeVisible()
-    await expect(page.getByText('Ошибка бронирования')).toBeVisible({ timeout: 10000 })
+    // Step 6: Try to book via API directly - should get 409 conflict
+    const slotIdValue = slotId.replace('slot-button-', '')
+    const response = await page.request.post('/api/bookings', {
+      data: {
+        slotId: slotIdValue,
+        guestName: 'Second User',
+        guestEmail: 'second@example.com',
+      }
+    })
+    expect(response.status()).toBe(409)
   })
 })

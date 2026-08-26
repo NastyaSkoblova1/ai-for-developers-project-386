@@ -20,7 +20,7 @@ export function buildApp() {
   app.register(fastifyStatic, {
     root: distPath,
     prefix: "/",
-    wildcard: false,
+    wildcard: true,
   });
 
   app.addContentTypeParser(
