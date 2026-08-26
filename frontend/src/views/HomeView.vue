@@ -66,6 +66,7 @@ function openBooking(id: string) {
         v-for="et in eventTypes"
         :key="et.id"
         class="card card-interactive p-6"
+        :data-testid="`event-type-card-${et.id}`"
         @click="openBooking(et.id)"
       >
         <div class="flex items-start justify-between mb-4">

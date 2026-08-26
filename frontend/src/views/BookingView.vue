@@ -169,7 +169,7 @@ function resetBooking() {
     </div>
 
     <!-- Success State -->
-    <div v-if="bookingSuccess && createdBooking" class="booking-container p-8 text-center animate-scale-in">
+    <div v-if="bookingSuccess && createdBooking" class="booking-container p-8 text-center animate-scale-in" data-testid="booking-success">
       <div class="w-20 h-20 rounded-full bg-success-50 flex items-center justify-center mx-auto mb-6 shadow-sm">
         <i class="pi pi-check text-3xl text-success-500"></i>
       </div>
@@ -222,6 +222,7 @@ function resetBooking() {
               class="w-full"
               inputClass="input-modern"
               panelClass="rounded-xl shadow-lg"
+              data-testid="calendar-picker"
             />
           </div>
 
@@ -248,6 +249,7 @@ function resetBooking() {
               :key="slot.id"
               class="time-slot-btn"
               :class="{ selected: selectedSlotId === slot.id }"
+              :data-testid="`slot-button-${slot.id}`"
               @click="selectSlot(slot.id)"
             >
               {{ formatSlotTime(slot.startTime) }}
@@ -265,40 +267,46 @@ function resetBooking() {
 
           <form v-else class="flex flex-col gap-4 animate-fade-in" @submit.prevent="submitBooking">
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1.5">
+              <label class="block text-sm font-medium text-gray-700 mb-1.5" for="guest-name">
                 Имя <span class="text-error-500">*</span>
               </label>
               <input
+                id="guest-name"
                 v-model="guestName"
                 type="text"
                 placeholder="Ваше имя"
                 class="input-modern"
                 :class="{ 'input-error': formErrors.guestName }"
+                data-testid="guest-name-input"
               />
               <p v-if="formErrors.guestName" class="text-xs text-error-500 mt-1.5 font-medium">{{ formErrors.guestName }}</p>
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1.5">
+              <label class="block text-sm font-medium text-gray-700 mb-1.5" for="guest-email">
                 Email <span class="text-error-500">*</span>
               </label>
               <input
+                id="guest-email"
                 v-model="guestEmail"
                 type="email"
                 placeholder="you@example.com"
                 class="input-modern"
                 :class="{ 'input-error': formErrors.guestEmail }"
+                data-testid="guest-email-input"
               />
               <p v-if="formErrors.guestEmail" class="text-xs text-error-500 mt-1.5 font-medium">{{ formErrors.guestEmail }}</p>
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1.5">Телефон</label>
+              <label class="block text-sm font-medium text-gray-700 mb-1.5" for="guest-phone">Телефон</label>
               <input
+                id="guest-phone"
                 v-model="guestPhone"
                 type="tel"
                 placeholder="+7 (999) 000-00-00"
                 class="input-modern"
+                data-testid="guest-phone-input"
               />
             </div>
 
@@ -307,6 +315,7 @@ function resetBooking() {
                 type="submit"
                 class="btn btn-primary w-full"
                 :disabled="isSubmitting"
+                data-testid="submit-booking-button"
               >
                 <span v-if="isSubmitting" class="flex items-center justify-center gap-2">
                   <i class="pi pi-spinner pi-spin"></i>
