@@ -5,6 +5,8 @@ frontend/dist
 .env
 .env.local
 .env.*.local
+frontend/.env.local
+frontend/.env.*.local
 Dockerfile
 .dockerignore
 .git
