@@ -66,7 +66,8 @@ docker run --rm -e PORT=3000 -e HOST=0.0.0.0 -p 3000:3000 meeting-app
 
 ## Production deployment
 
-- **Платформа:** Render (Web Service, Docker runtime)
+### Вариант 1: Render (Web Service, Docker runtime)
+
 - **Конфигурация:** `render.yaml` в корне репозитория
 - **Схема:** один Docker-контейнер, в котором Fastify раздаёт собранный frontend (`frontend/dist`) и API
 - **Порт:** приложение использует переменную окружения `PORT`
@@ -75,5 +76,26 @@ docker run --rm -e PORT=3000 -e HOST=0.0.0.0 -p 3000:3000 meeting-app
 Для деплоя:
 1. Запушьте изменения в `main`
 2. В Render Dashboard: **New Web Service** → выберите репозиторий → **Runtime: Docker** → **Deploy**
+
+### Вариант 2: Railway (альтернатива)
+
+Используйте тот же `Dockerfile`. Создайте новый проект в Railway → **Deploy from GitHub repo** → выберите репозиторий. Railway автоматически определит `Dockerfile` и запустит контейнер.
+
+### Вариант 3: Локальный туннель (для демо)
+
+Если нужно быстро получить публичную ссылку без деплоя:
+
+```bash
+# 1. Запустите Docker контейнер
+docker run --rm -d -e PORT=3000 -e HOST=0.0.0.0 -p 3000:3000 meeting-app
+
+# 2. Установите localtunnel
+npm install -g localtunnel
+
+# 3. Запустите туннель
+lt --port 3000
+```
+
+Команда выдаст временный публичный URL (например, `https://xxxx.loca.lt`).
 
 **Публичная ссылка:** *(заполнить после деплоя)*
